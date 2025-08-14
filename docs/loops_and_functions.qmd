@@ -1,0 +1,98 @@
+---
+title: "loops_and_functions"
+format: html
+editor: visual
+---
+
+## For loops revisited
+
+```{r}
+weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+transects <- c("Transect A", "Transect B", "Transect C")
+
+matrix_vals <- vector(mode = "character", length = (length(weekdays) * length(transects)))
+
+index = 1
+
+for (i in seq_along(weekdays)) {
+  for (j in seq_along(transects)) {
+    matrix_vals[index] <- paste(weekdays[i], "-", transects[j])
+    index <- index + 1
+  }
+}
+
+my_matrix <- matrix(data = matrix_vals, nrow = length(weekdays), ncol = length(transects), byrow = TRUE)
+
+my_matrix
+```
+
+Task 2
+
+```{r}
+force <- function(m, a) {
+  return (m * a)
+}
+
+force(40, 4.3)
+```
+
+Task 3
+
+```{r}
+
+fish_parms <- data.frame(sci_name = c("Chanos chanos", "Sphyraena barracuda", "Caranx ignobilis"), common_name = c("Milkfish", "Great barracuda", "Giant trevally"), a_est = c(0.0905, 0.0181, 0.0353), b_est = c(2.52, 3.27, 3.05))
+
+fish_parms
+
+
+fish_weight <- function(fish_name, tot_length) {
+  
+  spec_fish <- subset(fish_parms, common_name == fish_name)
+  print(spec_fish)
+  
+  weight <- (spec_fish[[3]] * (tot_length ^ spec_fish[[4]]))
+  print(weight)
+  return (weight)  
+}
+
+length_range <- seq(0, 100, 1)
+milkfish_weights <- fish_weight("Milkfish", length_range)
+
+milkfish_weights <- data.frame(length = length_range, weight= milkfish_weights)
+
+library(tidyverse)
+
+ggplot(milkfish_weights, aes(x = length, y = weight)) +
+  geom_point()
+```
+
+Task 4
+
+```{r}
+wave_power <- function(h, t) {
+  power <- (0.5) * h^2 * t
+  return (power)
+}
+
+wave_heights <- seq(0, 3, 0.2)
+
+wave_power(wave_heights, 8)
+```
+
+Task 5
+
+```{r}
+wave_power <- function(h, t, d) {
+  if (d > 12) {
+    message("Calculating power of a deep wave... \n")
+    power <- (0.5) * h^2 * t
+  } else 
+    message("Calculating power of a shallow wave... \n")
+    power <- (0.81) * h^2 * t
+  print(paste("Power:", round(power, 2), "kW/m"))
+}
+
+wave_heights <- seq(0, 3, 0.2)
+
+wave_power(wave_heights, 8, 11)
+```
